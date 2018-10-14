@@ -55,6 +55,9 @@ public class OAuth2Configuration extends AuthorizationServerConfigurerAdapter {
     @Value("${oauth2.private-key.password}")
     private String privateKeyPassword;
 
+    @Value("${oauth2.access-token.expire-in}")
+    private Integer accessTokenExpireIn;
+
     /**
      * JWT方式存储token
      * @return
@@ -115,7 +118,7 @@ public class OAuth2Configuration extends AuthorizationServerConfigurerAdapter {
         //支持刷新Token
         tokenServices.setSupportRefreshToken(true);
         //accessToken有效期
-        tokenServices.setAccessTokenValiditySeconds( (int) TimeUnit.DAYS.toSeconds(30)); // 30天
+        tokenServices.setAccessTokenValiditySeconds( (int) TimeUnit.HOURS.toSeconds(accessTokenExpireIn));
 
         //配置accessToken附加信息
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();

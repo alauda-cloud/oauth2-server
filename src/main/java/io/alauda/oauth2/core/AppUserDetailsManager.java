@@ -1,14 +1,11 @@
 package io.alauda.oauth2.core;
 
-import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.util.Assert;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -64,20 +61,18 @@ public class AppUserDetailsManager extends JdbcUserDetailsManager {
 
         UserInfo user = (UserInfo)userDetails;
 
-        this.getJdbcTemplate().update(this.createUserSql, new PreparedStatementSetter() {
-            public void setValues(PreparedStatement ps) throws SQLException {
-                int idx = 1;
-                ps.setString(idx++, user.getUsername());
-                ps.setString(idx++, user.getPassword());
-                ps.setBoolean(idx++, user.isAccountNonExpired());
-                ps.setBoolean(idx++, user.isCredentialsNonExpired());
-                ps.setBoolean(idx++, user.isAccountNonLocked());
-                ps.setBoolean(idx++, user.isEnabled());
-                ps.setString(idx++, user.getAvatar());
-                ps.setString(idx++, user.getMail());
-                ps.setString(idx++, user.getPhone());
-                ps.setString(idx++, user.getDisplayName());
-            }
+        this.getJdbcTemplate().update(this.createUserSql, ps -> {
+            int idx = 1;
+            ps.setString(idx++, user.getUsername());
+            ps.setString(idx++, user.getPassword());
+            ps.setBoolean(idx++, user.isAccountNonExpired());
+            ps.setBoolean(idx++, user.isCredentialsNonExpired());
+            ps.setBoolean(idx++, user.isAccountNonLocked());
+            ps.setBoolean(idx++, user.isEnabled());
+            ps.setString(idx++, user.getAvatar());
+            ps.setString(idx++, user.getMail());
+            ps.setString(idx++, user.getPhone());
+            ps.setString(idx++, user.getDisplayName());
         });
         if (this.getEnableAuthorities()) {
             this.insertUserAuthorities(user);

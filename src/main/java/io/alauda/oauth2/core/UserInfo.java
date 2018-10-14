@@ -8,8 +8,6 @@ import java.util.Collection;
 @Data
 public class UserInfo extends User {
 
-    private static final long serialVersionUID = 5231134212346077681L;
-
     private Long id;
     private String avatar;
     private String phone;
